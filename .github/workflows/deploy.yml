@@ -1,0 +1,19 @@
+name: Deploy to Quick
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: Shopify/skai-train/.github/actions/deploy-to-quick@main
+        with:
+          dir: .
+          site_name: rev-pacing-global

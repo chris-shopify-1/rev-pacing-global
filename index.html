@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacing — All Segments</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px}
+    .d{max-width:1500px;margin:0 auto;padding:20px 24px 60px}
+    .hdr{text-align:center;padding:24px 0 4px} .hdr h1{font-size:22px;font-weight:600}
+    .sub{text-align:center;font-size:13px;color:#484f58;padding:4px 0 8px}
+    .ctx{text-align:center;color:#8b949e;font-size:13px;padding:4px 0 16px} .ctx strong{color:#e6edf3}
+
+    .filters{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 24px;margin-bottom:16px}
+    .filter-row{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+    .filter-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#8b949e;margin-bottom:4px}
+    .btn-group{display:flex;gap:4px}
+    .fbtn{padding:6px 16px;border-radius:5px;border:1px solid #30363d;background:#21262d;color:#8b949e;font-size:13px;cursor:pointer;transition:all .15s}
+    .fbtn:hover{border-color:#484f58;color:#e6edf3}
+    .fbtn.active{background:#58a6ff22;border-color:#58a6ff;color:#58a6ff}
+
+    .hero-hdr{font-size:11px;color:#484f58;margin:16px 0 6px}
+    .hero-row-label{font-size:12px;font-weight:700;color:#c9d1d9;text-transform:uppercase;letter-spacing:.6px;margin:10px 0 6px}
+    .hero{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+    .hero-card{padding:12px 16px;border-radius:8px;border:1px solid #30363d;background:#161b22}
+    .hero-stage{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#484f58;margin-bottom:2px}
+    .hero-src{font-size:9px;color:#6e7681;font-weight:400;text-transform:none;letter-spacing:0}
+    .hero-val{font-size:22px;font-weight:700;color:#e6edf3;margin-bottom:4px}
+    .hero-sub{font-size:12px;color:#8b949e;display:flex;align-items:center;gap:6px}
+    .hpct{font-weight:600} .hpct.g{color:#3fb950} .hpct.y{color:#d29922} .hpct.r{color:#f85149}
+    .hdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+    .dg{background:#3fb950}.dy{background:#d29922}.dr{background:#f85149}
+
+    .tbl-title{font-size:13px;font-weight:500;color:#8b949e;margin:20px 0 6px}
+    .tbl-wrap{overflow-x:auto;margin-bottom:8px}
+    table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+    thead th{background:#161b22;color:#8b949e;font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px;padding:7px 9px;border-bottom:1px solid #30363d;text-align:right}
+    thead th:first-child,thead th:nth-child(2){text-align:left}
+    thead th.gh{text-align:center;border-bottom:2px solid #30363d;font-size:11px;letter-spacing:.8px;color:#58a6ff}
+    tbody td{padding:6px 9px;border-bottom:1px solid #21262d;text-align:right;font-variant-numeric:tabular-nums}
+    tbody td:first-child,tbody td:nth-child(2){text-align:left;font-weight:500;color:#e6edf3}
+    tbody tr:nth-child(even){background:#0d1117} tbody tr:nth-child(odd){background:#161b22}
+    tbody tr.tr{background:#1c2333!important;font-weight:600} tbody tr.tr td{border-top:2px solid #30363d;color:#e6edf3}
+    .pd{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .pg{background:#3fb950}.py{background:#d29922}.pr{background:#f85149}
+    td.pc{text-align:center}
+    .note{font-size:11px;color:#484f58;margin-top:2px}
+    .outlier-note{font-size:11px;color:#8b949e;margin-top:4px;font-style:italic}
+
+    .pipe-strip{margin:10px 0 0;padding:8px 0;border-top:1px solid #21262d;font-size:12px;color:#8b949e;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .pipe-strip .pipe-lbl{color:#484f58;font-weight:600}
+    .pipe-strip .pipe-num{font-weight:700;font-size:13px}
+    .pipe-strip .pipe-num.ppg{color:#3fb950}.pipe-strip .pipe-num.ppy{color:#d29922}.pipe-strip .pipe-num.ppn{color:#8b949e}
+    .pipe-strip .pipe-det{color:#484f58;font-size:11px}
+    .pipe-strip .divider{color:#30363d;margin:0 4px}
+    .pipe-strip .early-tag{font-size:8px;padding:1px 4px;border-radius:2px;background:#30363d;color:#8b949e;vertical-align:middle}
+    .vel-label{font-size:14px;font-weight:700;color:#c9d1d9;text-transform:uppercase;letter-spacing:.8px;margin:28px 0 12px;padding-top:20px;border-top:1px solid #21262d}
+    .vel-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+    .vel-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 20px}
+    .vel-title{font-size:13px;font-weight:600;color:#e6edf3;margin-bottom:2px}
+    .vel-sub{font-size:11px;color:#484f58;margin-bottom:12px}
+    .vel-chart{height:220px}
+    .vel-legend{display:flex;gap:20px;justify-content:center;margin:8px 0 0;font-size:12px;color:#8b949e}
+    .vel-legend-item{display:flex;align-items:center;gap:6px}
+    .vel-legend-dot{width:10px;height:10px;border-radius:2px}
+    .empty{text-align:center;color:#484f58;padding:40px 20px;font-size:14px}
+    .status{text-align:center;padding:60px 20px;color:#8b949e;font-size:14px}
+    .sp{display:inline-block;width:20px;height:20px;border:2px solid #30363d;border-top-color:#58a6ff;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .err{color:#f85149}
+    .retry{margin-top:12px;padding:6px 16px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer}
+    .loading-inline{text-align:center;color:#8b949e;padding:30px;font-size:13px}
+    .quarter-nav{text-align:center;padding:4px 0 8px;display:flex;gap:6px;justify-content:center}
+    .q-btn{padding:6px 18px;border-radius:6px;border:1px solid #30363d;background:#161b22;color:#8b949e;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+    .q-btn:hover{border-color:#484f58;color:#e6edf3}
+    .q-btn.active{background:#58a6ff18;border-color:#58a6ff;color:#58a6ff}
+    .q-current{font-size:9px;background:#58a6ff33;color:#79c0ff;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:middle}
+  </style>
+</head>
+<body>
+<div class="d">
+  <div class="hdr"><h1 id="title">Pacing — All Segments</h1></div>
+  <div class="sub">All sales teams and regions</div>
+  <div class="ctx" id="ctx"></div>
+  <div class="quarter-nav" id="quarter-nav"></div>
+  <div id="ms" class="status"><span class="sp"></span>Connecting to BigQuery...</div>
+  <div id="app" style="display:none">
+    <div class="filters">
+      <div class="filter-row">
+        <div>
+          <div class="filter-label">Region</div>
+          <div class="btn-group" id="rgn-btns"></div>
+        </div>
+        <div>
+          <div class="filter-label">Segment</div>
+          <div class="btn-group" id="seg-btns"></div>
+        </div>
+      </div>
+    </div>
+    <div id="content"></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="/client/quick.js"></script>
+<script type="module">
+const T='`sdp-for-analysts-platform.rev_ops_prod.temp_sales_performance`';
+const FT='`sdp-for-analysts-platform.rev_ops_prod.modelled_salesforce_forecast`';
+// Pipeline now sourced from temp_sales_performance (same as RevOps). Archive table removed.
+const FC_SEGMAP=`CASE
+  WHEN owner_team_segment = 'D2C SMB Acquisition' THEN 'D2C SMB Acq'
+  WHEN owner_team_segment IN ('Retail SMB Acquisition','Retail SMB') THEN 'Retail SMB Acq'
+  WHEN owner_team_segment IN ('D2C Retail Mid-Mkt','Mid-Mkt','Mid Market') THEN 'Mid-Market'
+  WHEN owner_team_segment IN ('D2C Retail Large','Large','Large Accounts') THEN 'Large Accounts'
+  WHEN owner_team_segment = 'Enterprise' THEN 'Enterprise'
+  WHEN owner_team_segment = 'Global Account' THEN 'Global Account'
+  WHEN owner_team_segment LIKE '%B2B%' THEN 'B2B'
+  ELSE 'Other' END`;
+const SM=`CASE
+  WHEN owner_team = 'D2C SMB Acquisition' THEN 'D2C SMB Acq'
+  WHEN owner_team = 'Retail SMB Acquisition' THEN 'Retail SMB Acq'
+  WHEN owner_team = 'D2C Retail Mid-Mkt' THEN 'Mid-Market'
+  WHEN owner_team = 'D2C Retail Large' THEN 'Large Accounts'
+  WHEN owner_team = 'Enterprise' THEN 'Enterprise'
+  WHEN owner_team = 'Global Account' THEN 'Global Account'
+  WHEN owner_team LIKE '%B2B%' THEN 'B2B'
+  ELSE 'Other' END`;
+const KN=`owner_team IN ('D2C SMB Acquisition','Retail SMB Acquisition','D2C Retail Mid-Mkt','D2C Retail Large','Enterprise','Global Account','B2B Large Mid-Mkt Acquisition','B2B Large Mid-Mkt Cross-Sell')`;
+const BF_BASE=`${KN} AND COALESCE(owner_line_of_business,'Unknown') NOT IN ('Ads','Lending') AND source_channel IN ('Inbound','Outbound','Partner')`;
+// PIPE_SEGMAP and PIPE_KNOWN removed — SM and KN are identical and already used via BF.
+const REGIONS=['AMER','EMEA','APAC'];
+const SEGS=['D2C SMB Acq','Retail SMB Acq','Mid-Market','Large Accounts','Enterprise','Global Account','B2B'];
+const SRC=['Inbound','Outbound','Partner'], STG=['SQL','SAL','CW'];
+
+// Q2 2026 CW PBR Target Overrides (TEMPORARY) — region-aware
+// Source: shopify-dw.sales.sales_team_targets_monthly_wide, confirmed loaded 2026-04-14 (Tracy Yang)
+// Remove this block once sales_performance_cohort_daily_summary targets are populated.
+const CW_PBR_OVERRIDES = {
+  'Q2_2026': {
+    'AMER': { 'Mid-Market':52339312, 'Large Accounts':36846345, 'B2B':20416962, 'Retail SMB Acq':27522201, 'D2C SMB Acq':20362521, 'Enterprise':49528554, 'Global Account':6013972, 'SMB Cross-Sell':48147774 },
+    'APAC': { 'Mid-Market':9781656, 'Large Accounts':2995344, 'B2B':0, 'Retail SMB Acq':169450, 'D2C SMB Acq':9416611, 'Enterprise':0, 'Global Account':0, 'SMB Cross-Sell':5907621 },
+    'EMEA': { 'Mid-Market':43036152, 'Large Accounts':11122545, 'B2B':4825059, 'Retail SMB Acq':1434538, 'D2C SMB Acq':22925809, 'Enterprise':8250638, 'Global Account':4479983, 'SMB Cross-Sell':19088381 }
+  }
+};
+
+function gqc(oQ,oY){const n=new Date(),q=oQ||Math.ceil((n.getMonth()+1)/3),y=oY||n.getFullYear(),s=new Date(y,(q-1)*3,1),e=new Date(y,q*3,0),td=Math.round((e-s)/864e5)+1,hist=e<n,el=hist?td:Math.round((n-s)/864e5)+1,f=d=>d.toISOString().split('T')[0],dm=hist?"'"+f(e)+"'":'CURRENT_DATE()';return{q,y,td,el,lp:el/td,rw:(td-el)/7,ss:f(s),es:f(e),ts:f(n),now:n,hist,dm};}
+const fp=v=>v!=null&&isFinite(v)?(v*100).toFixed(1)+'%':'--';
+const fc=v=>v!=null&&isFinite(v)?Math.round(v).toLocaleString():'--';
+function fb(v){if(v==null||!isFinite(v))return'--';const a=Math.abs(v);return a>=1e6?'$'+(v/1e6).toFixed(1)+'M':a>=1e3?'$'+(v/1e3).toFixed(0)+'K':'$'+v.toFixed(0);}
+function pcl(p,l){if(p==null||!isFinite(p))return'r';const d=(p-l)*100;return d>=-5?'g':d>=-15?'y':'r';}
+function fpcl(p){if(p==null||!isFinite(p))return'r';return p>=.95?'g':p>=.8?'y':'r';}
+
+const cache={};
+async function loadRegion(rgn,c){
+  const cacheKey=rgn+'_Q'+c.q+'_'+c.y;
+  if(cache[cacheKey])return cache[cacheKey];
+  const o={timeoutMs:90000},rf=`owner_region='${rgn}'`;
+  const nq=c.q<4?c.q+1:1, ny=c.q<4?c.y:c.y+1;
+  const BF=`${rf} AND ${BF_BASE}`;
+  const nqS=`${ny}-${String((nq-1)*3+1).padStart(2,'0')}-01`, nqE=`${ny}-${String(nq*3).padStart(2,'0')}-${nq===1||nq===4?'31':'30'}`;
+  const [r1,r2,r3,r4,r5,r6,r7,r8]=await Promise.all([
+    quick.dw.querySync(`SELECT ${SM} AS seg,source_channel AS src,'SQL' AS stg,SUM(created_opportunity_count) AS cnt,SUM(created_opportunity_projected_billed_revenue) AS pbr FROM ${T} WHERE ${BF} AND created_date>='${c.ss}' AND created_date<=${c.dm} GROUP BY 1,2 UNION ALL SELECT ${SM},source_channel,'SAL',SUM(sal_count),SUM(qualified_opportunity_projected_billed_revenue) FROM ${T} WHERE ${BF} AND qualified_date>='${c.ss}' AND qualified_date<=${c.dm} GROUP BY 1,2 UNION ALL SELECT ${SM},source_channel,'CW',SUM(cw_count),SUM(closed_won_projected_billed_revenue) FROM ${T} WHERE ${BF} AND close_date>='${c.ss}' AND close_date<=${c.dm} AND is_won=TRUE GROUP BY 1,2`,null,o),
+    quick.dw.querySync(`SELECT ${SM} AS seg,source_channel AS src,DATE_TRUNC(created_date,ISOWEEK) AS wk,'SQL' AS stg,SUM(created_opportunity_count) AS cnt,SUM(created_opportunity_projected_billed_revenue) AS pbr FROM ${T} WHERE ${BF} AND created_date>='${c.ss}' AND created_date<=${c.dm} GROUP BY 1,2,3 UNION ALL SELECT ${SM},source_channel,DATE_TRUNC(qualified_date,ISOWEEK),'SAL',SUM(sal_count),SUM(qualified_opportunity_projected_billed_revenue) FROM ${T} WHERE ${BF} AND qualified_date>='${c.ss}' AND qualified_date<=${c.dm} GROUP BY 1,2,3 UNION ALL SELECT ${SM},source_channel,DATE_TRUNC(close_date,ISOWEEK),'CW',SUM(cw_count),SUM(closed_won_projected_billed_revenue) FROM ${T} WHERE ${BF} AND close_date>='${c.ss}' AND close_date<=${c.dm} AND is_won=TRUE GROUP BY 1,2,3`,null,o),
+    quick.dw.querySync(`SELECT ${SM} AS seg,source_channel AS src,'SQL' AS stg,ROUND(SUM(created_opportunity_count_target)) AS cnt,ROUND(SUM(created_opportunity_projected_billed_revenue_target)) AS pbr FROM ${T} WHERE ${BF} AND created_date>='${c.ss}' AND created_date<='${c.es}' GROUP BY 1,2 UNION ALL SELECT ${SM},source_channel,'SAL',ROUND(SUM(qualified_opportunity_count_target)),ROUND(SUM(qualified_opportunity_projected_billed_revenue_target)) FROM ${T} WHERE ${BF} AND qualified_date>='${c.ss}' AND qualified_date<='${c.es}' GROUP BY 1,2 UNION ALL SELECT ${SM},source_channel,'CW',ROUND(SUM(closed_won_opportunity_count_target)),ROUND(SUM(closed_won_projected_billed_revenue_target)) FROM ${T} WHERE ${BF} AND close_date>='${c.ss}' AND close_date<='${c.es}' GROUP BY 1,2`,null,o),
+    quick.dw.querySync(`WITH dp AS (SELECT ${SM} AS seg,source_channel AS src,'SAL' AS stg,opportunity_id,DATE_TRUNC(qualified_date,ISOWEEK) AS wk,qualified_opportunity_projected_billed_revenue AS pbr FROM ${T} WHERE ${BF} AND qualified_date>='${c.ss}' AND qualified_date<=${c.dm} AND sal_count>0 AND qualified_opportunity_projected_billed_revenue>0 UNION ALL SELECT ${SM},source_channel,'CW',opportunity_id,DATE_TRUNC(close_date,ISOWEEK),closed_won_projected_billed_revenue FROM ${T} WHERE ${BF} AND close_date>='${c.ss}' AND close_date<=${c.dm} AND is_won=TRUE AND cw_count>0 AND closed_won_projected_billed_revenue>0 UNION ALL SELECT ${SM},source_channel,'SQL',opportunity_id,DATE_TRUNC(created_date,ISOWEEK),created_opportunity_projected_billed_revenue FROM ${T} WHERE ${BF} AND created_date>='${c.ss}' AND created_date<=${c.dm} AND created_opportunity_count>0 AND created_opportunity_projected_billed_revenue>0),st AS (SELECT seg,src,stg,AVG(pbr) AS m,STDDEV(pbr) AS s FROM dp GROUP BY 1,2,3 HAVING COUNT(*)>=5) SELECT d.seg,d.src,d.stg,d.opportunity_id,d.wk,d.pbr FROM dp d JOIN st s ON d.seg=s.seg AND d.src=s.src AND d.stg=s.stg WHERE d.pbr>s.m+3*s.s`,null,o),
+    quick.dw.querySync(`WITH lf AS (SELECT ${FC_SEGMAP} AS seg,value,forecasting_item_id,ROW_NUMBER() OVER (PARTITION BY forecasting_item_id ORDER BY source_timestamp DESC) AS rn FROM ${FT} WHERE measure='Closed Won' AND value_type='Projected Billed Revenue' AND EXTRACT(YEAR FROM period_start_date)=${c.y} AND EXTRACT(QUARTER FROM period_start_date)=${c.q} AND is_lead_forecast=TRUE AND forecast_owner_role='Lead' AND DATE(source_timestamp)>=period_start_date AND DATE(source_timestamp)<=period_end_date AND owner_region='${rgn}') SELECT seg,ROUND(SUM(value),0) AS fc_pbr FROM lf WHERE rn=1 AND seg!='Other' GROUP BY 1`,null,o),
+    quick.dw.querySync(`SELECT ${SM} AS seg,ROUND(SUM(open_pipe_qualified_projected_billed_revenue)/1e6,1) AS pipe_m,ROUND(SUM(closed_won_projected_billed_revenue_target)/1e6,1) AS cw_tgt_m,ROUND(SUM(closed_won_projected_billed_revenue)/1e6,1) AS cw_act_m FROM ${T} WHERE ${BF} AND close_date>='${c.ss}' AND close_date<='${c.es}' GROUP BY 1`,null,o).catch(()=>({results:[]})),
+    quick.dw.querySync(`WITH d AS (SELECT ${FC_SEGMAP} AS seg,value,forecasting_item_id,ROW_NUMBER() OVER (PARTITION BY forecasting_item_id ORDER BY source_timestamp DESC) AS rn FROM ${FT} WHERE measure='Closed Won' AND value_type='Projected Billed Revenue' AND EXTRACT(YEAR FROM period_start_date)=${ny} AND EXTRACT(QUARTER FROM period_start_date)=${nq} AND owner_region='${rgn}' AND DATE(source_timestamp)>=DATE_SUB(CURRENT_DATE(),INTERVAL 14 DAY)) SELECT seg,ROUND(SUM(value)/1e6,1) AS pipe_m FROM d WHERE rn=1 AND seg!='Other' GROUP BY 1`,null,o).catch(()=>({results:[]})),
+    quick.dw.querySync(`SELECT ${SM} AS seg,ROUND(SUM(closed_won_projected_billed_revenue_target)/1e6,1) AS tgt_m FROM ${T} WHERE ${BF} AND close_date>=DATE('${nqS}') AND close_date<=DATE('${nqE}') GROUP BY 1`,null,o).catch(()=>({results:[]})),
+  ]);
+  const D={}, salesFc={}, pipeQ1={}, pipeQ2={}, q2Tgt={};
+  const mk=(s,sr,st)=>`${s}|${sr}|${st}`;
+  for(const r of r1.results){const k=mk(r.seg,r.src,r.stg);if(!D[k])D[k]={a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};D[k].a={c:r.cnt||0,p:r.pbr||0};}
+  for(const r of r3.results){const k=mk(r.seg,r.src,r.stg);if(!D[k])D[k]={a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};D[k].t={c:r.cnt||0,p:r.pbr||0};}
+  // Apply CW PBR target overrides: if query returned NULL CW PBR targets, inject from overrides (region-aware)
+  const ovrKey=`Q${c.q}_${c.y}`;
+  const cwOvrQ=CW_PBR_OVERRIDES[ovrKey];
+  const cwOvr=cwOvrQ&&cwOvrQ[rgn];
+  if(cwOvr){
+    for(const seg of SEGS){
+      const ovrVal=cwOvr[seg];
+      if(ovrVal>0){
+        const cwKeys=SRC.map(sr=>mk(seg,sr,'CW')).filter(k=>D[k]);
+        if(cwKeys.length>0){
+          const perKey=ovrVal/cwKeys.length;
+          for(const k of cwKeys){if(!D[k].t.p||D[k].t.p===0)D[k].t.p=perKey;}
+        } else {
+          const k=mk(seg,'Inbound','CW');
+          if(!D[k])D[k]={a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};
+          if(!D[k].t.p||D[k].t.p===0)D[k].t.p=ovrVal;
+        }
+      }
+    }
+  }
+  for(const r of r2.results){const k=mk(r.seg,r.src,r.stg);if(!D[k])D[k]={a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};const ws=typeof r.wk==='object'&&r.wk.value?r.wk.value:String(r.wk).split('T')[0];D[k].w.push({wk:ws,c:r.cnt||0,p:r.pbr||0});}
+  for(const r of r4.results){const k=mk(r.seg,r.src,r.stg);if(!D[k])D[k]={a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};const ws=typeof r.wk==='object'&&r.wk.value?r.wk.value:String(r.wk).split('T')[0];D[k].o.push({wk:ws,p:r.pbr||0});}
+  for(const r of r5.results){if(r.seg)salesFc[r.seg]=(salesFc[r.seg]||0)+(r.fc_pbr||0);}
+  for(const r of (r6.results||[])){if(r.seg){if(!pipeQ1[r.seg])pipeQ1[r.seg]={pipe:0,tgt:0,act:0};pipeQ1[r.seg].pipe+=(r.pipe_m||0);pipeQ1[r.seg].tgt+=(r.cw_tgt_m||0);pipeQ1[r.seg].act+=(r.cw_act_m||0);}}
+  for(const r of (r7.results||[])){if(r.seg)pipeQ2[r.seg]=(pipeQ2[r.seg]||0)+(r.pipe_m||0);}
+  for(const r of (r8.results||[])){if(r.seg)q2Tgt[r.seg]=(r.tgt_m||0);}
+  D._salesFc=salesFc; D._pipeQ1=pipeQ1; D._pipeQ2=pipeQ2; D._q2Tgt=q2Tgt;
+  cache[cacheKey]=D;
+  return D;
+}
+
+function calcForecast(D,seg,c){
+  const m=c.td/c.el,co=new Date(c.now);co.setDate(c.now.getDate()-6);
+  const cB=.90,pB=.85,R={};
+  for(const sr of SRC)for(const st of STG){
+    const d=D[`${seg}|${sr}|${st}`]||{a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]};
+    const wks=[...d.w].sort((a,b)=>b.wk.localeCompare(a.wk)).filter(w=>new Date(w.wk+'T00:00:00')<co).slice(0,4);
+    let cs=0,ps=0;for(const w of wks){cs+=w.c;ps+=(w.p-d.o.filter(o=>o.wk===w.wk).reduce((s,o)=>s+o.p,0));}
+    const n=wks.length||1,ot=d.o.reduce((s,o)=>s+o.p,0),sy=d.a.p-ot;
+    R[`${sr}|${st}`]={ac:d.a.c,ap:d.a.p,tc:d.t.c,tp:d.t.p,
+      linC:d.a.c*m,linP:d.a.p*m,linCP:d.t.c?d.a.c*m/d.t.c:null,linPP:d.t.p?d.a.p*m/d.t.p:null,
+      beC:d.a.c+(cs/n)*cB*c.rw,beP:Math.max(sy+(ps/n)*pB*c.rw,0),
+      beCP:d.t.c?(d.a.c+(cs/n)*cB*c.rw)/d.t.c:null,bePP:d.t.p?Math.max(sy+(ps/n)*pB*c.rw,0)/d.t.p:null,sy};
+  }
+  return R;
+}
+
+function totals(fd,stg,ty){
+  let c=0,p=0,tc=0,tp=0,fcc=0,fcp=0;
+  for(const sr of SRC){const d=fd[`${sr}|${stg}`]||{};c+=d.ac||0;tc+=d.tc||0;tp+=d.tp||0;
+    p+=ty==='be'&&d.sy!=null?d.sy:d.ap||0;fcc+=ty==='lin'?d.linC||0:d.beC||0;fcp+=ty==='lin'?d.linP||0:d.beP||0;}
+  if(ty==='lin'){p=0;for(const sr of SRC)p+=(fd[`${sr}|${stg}`]||{}).ap||0;}
+  return{c,p,tc,tp,fcc,fcp,fccp:tc?fcc/tc:null,fcpp:tp?fcp/tp:null};
+}
+
+function heroCard(stg,src,val,pct,tgtLabel){
+  const pc=fpcl(pct);
+  return`<div class="hero-card"><div class="hero-stage">${stg} <span class="hero-src">— ${src}</span></div><div class="hero-val">${val}</div><div class="hero-sub"><span class="hdot d${pc}"></span><span class="hpct ${pc}">${fp(pct)}</span> of ${tgtLabel}</div></div>`;
+}
+
+function renderHero(fd,c,seg,D){
+  const sqlT=totals(fd,'SQL','be'),salT=totals(fd,'SAL','be'),cwT=totals(fd,'CW','be');
+  const salesFc=D._salesFc||{};
+  const hasSalesFc=salesFc[seg]!=null&&salesFc[seg]>0;
+  const beL=c.hist?'Final':'Best Estimate';
+  const cwPbrVal=c.hist?cwT.fcp:(hasSalesFc?salesFc[seg]:cwT.fcp);
+  const cwPbrPct=cwT.tp?(cwPbrVal/cwT.tp):null;
+  const cwPbrSrc=c.hist?'Final':(hasSalesFc?'Sales Leader Forecast':'Best Estimate');
+  let h=c.hist
+    ?`<div class="hero-hdr">Final results for Q${c.q} ${c.y}. Complete quarter actuals.</div>`
+    :`<div class="hero-hdr">Projected EoQ. SQL &amp; SAL: L4W velocity, 10% count / 15% PBR buffer, outliers removed. CW PBR: ${cwPbrSrc}.</div>`;
+  h+=`<div class="hero-row-label">Count</div><div class="hero">`;
+  h+=heroCard('SQL',beL,fc(sqlT.fcc),sqlT.fccp,fc(sqlT.tc)+' target');
+  h+=heroCard('SAL',beL,fc(salT.fcc),salT.fccp,fc(salT.tc)+' target');
+  h+=heroCard('Closed Won',beL,fc(cwT.fcc),cwT.fccp,fc(cwT.tc)+' target');
+  h+=`</div><div class="hero-row-label">PBR</div><div class="hero">`;
+  h+=heroCard('SQL',beL,fb(sqlT.fcp),sqlT.fcpp,fb(sqlT.tp)+' target');
+  h+=heroCard('SAL',beL,fb(salT.fcp),salT.fcpp,fb(salT.tp)+' target');
+  h+=heroCard('Closed Won',cwPbrSrc,fb(cwPbrVal),cwPbrPct,fb(cwT.tp)+' target');
+  h+=`</div>`;
+
+  const p1=(D._pipeQ1||{})[seg];
+  const nq=c.q<4?c.q+1:1;
+  if(p1){
+    // Use override CW PBR target if the main targets query returned 0/NULL
+    let cwTgtM=cwT.tp/1e6;
+    if(!cwTgtM||cwTgtM===0){const oq=(CW_PBR_OVERRIDES[`Q${c.q}_${c.y}`]||{})[curRgn];const ov=oq&&oq[seg];if(ov)cwTgtM=ov/1e6;}
+    const remaining=cwTgtM-p1.act;
+    const q1Cov=remaining>0?p1.pipe/remaining:null;
+    const q1Cls=q1Cov>=2?'ppg':q1Cov>=1?'ppy':'ppn';
+    const q2P=(D._pipeQ2||{})[seg]||0;
+    const q2T=(D._q2Tgt||{})[seg]||0;
+    const q2Cov=q2T>0?q2P/q2T:null;
+    h+=`<div class="pipe-strip">`;
+    h+=`<span class="pipe-lbl">Pipeline Coverage:</span>`;
+    h+=`Q${c.q}: <span class="pipe-num ${q1Cls}">${q1Cov!=null?q1Cov.toFixed(2)+'x':'--'}</span>`;
+    h+=`<span class="pipe-det">(${fb(p1.pipe*1e6)} open / ${fb(remaining*1e6)} remaining)</span>`;
+    h+=`<span class="divider">|</span>`;
+    h+=`Q${nq}: <span class="pipe-num ppn">${q2Cov!=null?q2Cov.toFixed(2)+'x':'--'}</span>`;
+    h+=`<span class="pipe-det">(${fb(q2P*1e6)} / ${fb(q2T*1e6)} target)</span>`;
+    h+=`</div>`;
+  }
+
+  return h;
+}
+
+function renderTable(name,fd,ty,c){
+  const lb=c.hist?'Final':(ty==='lin'?'Linear Forecast':'Best Estimate');
+  let h=`<div class="tbl-title">${name} ${lb}${c.hist?'':' as of '+c.ts}</div>`;
+  h+=`<div class="note">${c.hist?'Complete quarter actuals.':(ty==='lin'?'Forecast = YTD × ('+c.td+'/'+c.el+')':'L4W velocity, 10% count / 15% PBR buffer, outliers removed')}</div>`;
+  h+='<div class="tbl-wrap"><table><thead>';
+  h+=`<tr><th colspan="2"></th><th class="gh" colspan="6">Count</th><th class="gh" colspan="6">PBR</th></tr>`;
+  h+=`<tr><th style="text-align:left">Source</th><th style="text-align:left">Stage</th><th>YTD</th><th>Target</th><th>% Tgt</th><th>${lb}</th><th>${lb} %</th><th>Pace</th><th>YTD</th><th>Target</th><th>% Tgt</th><th>${lb}</th><th>${lb} %</th><th>Pace</th></tr></thead><tbody>`;
+  const rows=[];for(const sr of SRC)for(const st of STG)rows.push({sr,st,tot:false});for(const st of STG)rows.push({sr:'TOTAL',st,tot:true});
+  for(const r of rows){
+    let ac,ap,tc,tp,fcc,fcp,fccp,fcpp;
+    if(r.tot){const t=totals(fd,r.st,ty);ac=t.c;ap=t.p;tc=t.tc;tp=t.tp;fcc=t.fcc;fcp=t.fcp;fccp=t.fccp;fcpp=t.fcpp;}
+    else{const d=fd[`${r.sr}|${r.st}`]||{};ac=d.ac||0;tc=d.tc||0;tp=d.tp||0;
+      ap=ty==='be'&&d.sy!=null?d.sy:d.ap||0;if(ty==='lin')ap=d.ap||0;
+      fcc=ty==='lin'?d.linC||0:d.beC||0;fcp=ty==='lin'?d.linP||0:d.beP||0;
+      fccp=ty==='lin'?d.linCP:d.beCP;fcpp=ty==='lin'?d.linPP:d.bePP;}
+    const pcc=tc?ac/tc:null,pcp=tp?ap/tp:null;
+    h+=`<tr${r.tot?' class="tr"':''}>
+      <td>${r.sr}</td><td>${r.st}</td>
+      <td>${fc(ac)}</td><td>${fc(tc)}</td><td>${fp(pcc)}</td><td>${fc(fcc)}</td><td>${fp(fccp)}</td><td class="pc"><span class="pd p${pcl(pcc,c.lp)}"></span></td>
+      <td>${fb(ap)}</td><td>${fb(tp)}</td><td>${fp(pcp)}</td><td>${fb(fcp)}</td><td>${fp(fcpp)}</td><td class="pc"><span class="pd p${pcl(pcp,c.lp)}"></span></td></tr>`;}
+  h+='</tbody></table></div>';return h;
+}
+
+let CTX, curRgn='AMER', curSeg='Mid-Market';
+let velCharts=[];
+
+function renderVelocity(D,seg,c){
+  const allW={};
+  for(const src of SRC)for(const stg of STG){
+    const k=`${seg}|${src}|${stg}`;
+    for(const w of (D[k]||{a:{c:0,p:0},t:{c:0,p:0},w:[],o:[]}).w){
+      if(!allW[w.wk])allW[w.wk]={};
+      if(!allW[w.wk][stg])allW[w.wk][stg]={ib:0,ob:0,p:0,ibP:0,obP:0,pP:0};
+      if(src==='Inbound'){allW[w.wk][stg].ib+=w.c||0;allW[w.wk][stg].ibP+=w.p||0;}
+      if(src==='Outbound'){allW[w.wk][stg].ob+=w.c||0;allW[w.wk][stg].obP+=w.p||0;}
+      if(src==='Partner'){allW[w.wk][stg].p+=w.c||0;allW[w.wk][stg].pP+=w.p||0;}
+    }
+  }
+  const wks=Object.keys(allW).sort();
+  const labels=wks.map((ws,i)=>{const d=new Date(ws+'T00:00:00');return[d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),'W'+(i+1)];});
+
+  function mk(id,stg,isPbr){
+    const cv=document.getElementById(id);if(!cv)return;
+    const ib=wks.map(w=>isPbr?(allW[w]?.[stg]?.ibP||0)/1e6:(allW[w]?.[stg]?.ib||0));
+    const ob=wks.map(w=>isPbr?(allW[w]?.[stg]?.obP||0)/1e6:(allW[w]?.[stg]?.ob||0));
+    const pt=wks.map(w=>isPbr?(allW[w]?.[stg]?.pP||0)/1e6:(allW[w]?.[stg]?.p||0));
+    const tots=ib.map((v,i)=>v+ob[i]+pt[i]);
+    const ch=new Chart(cv,{type:'bar',data:{labels,datasets:[
+      {label:'Inbound',data:ib,backgroundColor:'#4ecdc4',borderRadius:2,datalabels:{display:false}},
+      {label:'Outbound',data:ob,backgroundColor:'#5b7fff',borderRadius:2,datalabels:{display:false}},
+      {label:'Partner',data:pt,backgroundColor:'#ff6b9d',borderRadius:2,datalabels:{display:true,anchor:'end',align:'end',offset:2,color:'#8b949e',font:{size:10,weight:600},formatter:(v,ctx)=>{const t=tots[ctx.dataIndex];return isPbr?'$'+t.toFixed(1)+'M':Math.round(t);}}}
+    ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1d27',borderColor:'#2e3345',borderWidth:1,callbacks:{label:c=>`${c.dataset.label}: ${isPbr?'$'+c.raw.toFixed(1)+'M':Math.round(c.raw)}`}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#8b8fa3',font:{size:10}},border:{display:false}},y:{stacked:true,grid:{color:'#21262d',lineWidth:.5},ticks:{color:'#8b8fa3',font:{size:10},callback:v=>isPbr?'$'+v+'M':v},border:{display:false}}}}});
+    velCharts.push(ch);
+  }
+
+  let h=`<div class="vel-legend"><div class="vel-legend-item"><div class="vel-legend-dot" style="background:#4ecdc4"></div> Inbound</div><div class="vel-legend-item"><div class="vel-legend-dot" style="background:#5b7fff"></div> Outbound</div><div class="vel-legend-item"><div class="vel-legend-dot" style="background:#ff6b9d"></div> Partner</div></div>`;
+  h+=`<div class="vel-label">SAL Velocity — Actuals</div><div class="vel-row"><div class="vel-card"><div class="vel-title">Weekly SAL Count</div><div class="vel-sub">Opportunity Deal Count by week</div><div class="vel-chart"><canvas id="vc-sal-cnt"></canvas></div></div><div class="vel-card"><div class="vel-title">Weekly SAL PBR</div><div class="vel-sub">Projected Billed Revenue ($M) by week</div><div class="vel-chart"><canvas id="vc-sal-pbr"></canvas></div></div></div>`;
+  h+=`<div class="vel-label">Closed Won Velocity — Actuals</div><div class="vel-row"><div class="vel-card"><div class="vel-title">Weekly Closed Won Count</div><div class="vel-sub">Opportunity Deal Count by week</div><div class="vel-chart"><canvas id="vc-cw-cnt"></canvas></div></div><div class="vel-card"><div class="vel-title">Weekly Closed Won PBR</div><div class="vel-sub">Projected Billed Revenue ($M) by week</div><div class="vel-chart"><canvas id="vc-cw-pbr"></canvas></div></div></div>`;
+  h+=`<div class="vel-label">SQL Velocity — Actuals</div><div class="vel-row"><div class="vel-card"><div class="vel-title">Weekly SQL Count</div><div class="vel-sub">Opportunity Deal Count by week</div><div class="vel-chart"><canvas id="vc-sql-cnt"></canvas></div></div><div class="vel-card"><div class="vel-title">Weekly SQL PBR</div><div class="vel-sub">Projected Billed Revenue ($M) by week</div><div class="vel-chart"><canvas id="vc-sql-pbr"></canvas></div></div></div>`;
+  return{html:h,render:()=>{Chart.register(ChartDataLabels);mk('vc-sal-cnt','SAL',false);mk('vc-sal-pbr','SAL',true);mk('vc-cw-cnt','CW',false);mk('vc-cw-pbr','CW',true);mk('vc-sql-cnt','SQL',false);mk('vc-sql-pbr','SQL',true);}};
+}
+
+
+function buildNav(){
+  const rb=document.getElementById('rgn-btns'),sb=document.getElementById('seg-btns');
+  rb.innerHTML='';sb.innerHTML='';
+  for(const r of REGIONS){const b=document.createElement('button');b.className='fbtn'+(r===curRgn?' active':'');b.textContent=r;b.onclick=()=>{curRgn=r;[...rb.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');selectView();};rb.appendChild(b);}
+  for(const s of SEGS){const b=document.createElement('button');b.className='fbtn'+(s===curSeg?' active':'');b.textContent=s;b.onclick=()=>{curSeg=s;[...sb.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');selectView();};sb.appendChild(b);}
+}
+
+async function selectView(){
+  const el=document.getElementById('content');
+  const cacheKey=curRgn+'_Q'+CTX.q+'_'+CTX.y;
+  const cached=!!cache[cacheKey];
+  if(!cached)el.innerHTML='<div class="loading-inline"><span class="sp"></span>Loading '+curRgn+' data...</div>';
+  try{
+    const D=await loadRegion(curRgn,CTX);
+    const fd=calcForecast(D,curSeg,CTX);
+    const hasData=SRC.some(sr=>STG.some(st=>(fd[`${sr}|${st}`]||{}).ac>0||(fd[`${sr}|${st}`]||{}).tc>0));
+    if(!hasData){el.innerHTML='<div class="empty">No data for '+curRgn+' '+curSeg+'</div>';return;}
+    velCharts.forEach(c=>c.destroy());velCharts=[];
+    const vel=renderVelocity(D,curSeg,CTX);
+    let h=renderHero(fd,CTX,curSeg,D);
+    h+=renderTable(curRgn+' '+curSeg,fd,'be',CTX);
+    h+=vel.html;
+    if(!CTX.hist) h+=renderTable(curRgn+' '+curSeg,fd,'lin',CTX);
+    el.innerHTML=h;
+    vel.render();
+  }catch(e){el.innerHTML=`<div class="err">Error: ${e.message}</div>`;}
+}
+
+async function waitQ(ms=10000){const t=Date.now();while(typeof quick==='undefined'){if(Date.now()-t>ms)throw new Error('Quick not loaded');await new Promise(r=>setTimeout(r,200));}}
+
+function buildQuarterNav(selQ,selY){
+  const nav=document.getElementById('quarter-nav');
+  nav.innerHTML='';
+  const now=new Date(),curQ=Math.ceil((now.getMonth()+1)/3),curY=now.getFullYear();
+  for(let q=1;q<=curQ;q++){
+    const btn=document.createElement('button');
+    const isCur=(q===curQ);
+    btn.className='q-btn'+(q===selQ?' active':'');
+    btn.innerHTML=`Q${q} ${curY}`+(isCur?' <span class="q-current">current</span>':'');
+    btn.onclick=()=>loadQ(q,curY);
+    nav.appendChild(btn);
+  }
+}
+
+async function loadQ(q,y){
+  const url=new URL(location);
+  url.searchParams.set('quarter',`Q${q}_${y}`);
+  history.replaceState(null,'',url);
+
+  CTX=gqc(q,y);
+  const suffix=CTX.hist?' (Final)':'';
+  document.getElementById('title').textContent=`Pacing — All Segments — Q${CTX.q} ${CTX.y}${suffix}`;
+  document.getElementById('ctx').innerHTML=CTX.hist
+    ?`Quarter ended <strong>${CTX.es}</strong> | ${CTX.td} days | Final results`
+    :`Data as of <strong>${CTX.ts}</strong> | ${CTX.el} days into Q${CTX.q} | Linear Pace: <strong>${(CTX.lp*100).toFixed(1)}%</strong> | ${CTX.rw.toFixed(1)} weeks remaining`;
+
+  buildQuarterNav(q,y);
+
+  const st=document.getElementById('ms');
+  st.style.display='block';
+  st.innerHTML='<span class="sp"></span>Loading '+curRgn+' data...';
+  document.getElementById('app').style.display='none';
+
+  try{
+    await loadRegion(curRgn,CTX);
+    st.style.display='none';
+    document.getElementById('app').style.display='block';
+    buildNav();
+    selectView();
+  }catch(e){
+    st.innerHTML=`<div class="err">Error: ${e.message}</div><button class="retry" onclick="location.reload()">Retry</button>`;
+    console.error(e);
+  }
+}
+
+async function main(){
+  const params=new URLSearchParams(location.search);
+  const qParam=params.get('quarter');
+  let initQ,initY;
+  if(qParam){const m=qParam.match(/Q(\d)_(\d{4})/);if(m){initQ=parseInt(m[1]);initY=parseInt(m[2]);}}
+  try{
+    await waitQ();
+    const auth=await quick.auth.requestScopes(['https://www.googleapis.com/auth/bigquery']);
+    if(!auth.hasRequiredScopes){document.getElementById('ms').innerHTML='<div class="err">BigQuery access denied.</div>';return;}
+    const now=new Date();
+    await loadQ(initQ||Math.ceil((now.getMonth()+1)/3),initY||now.getFullYear());
+  }catch(e){
+    document.getElementById('ms').innerHTML=`<div class="err">Error: ${e.message}</div><button class="retry" onclick="location.reload()">Retry</button>`;
+    console.error(e);
+  }
+}
+main();
+</script>
+</body>
+</html>
